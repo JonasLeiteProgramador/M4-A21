@@ -5,7 +5,7 @@ const app = express();
 const port = 3090;
 
 
-app.get('/user',(req,res)=>{
+app.get('/message',(req,res)=>{
     res.status(201).json({message:'Jonas me adota?'})
 })
 app.use(express.json())
