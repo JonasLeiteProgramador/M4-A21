@@ -6,7 +6,7 @@ const port = 3090;
 
 
 app.get('/message',(req,res)=>{
-    res.status(201).json({message:'Jonas me adota?'})
+    res.status(201).send('Jonas me adota?')
 })
 app.use(express.json())
 
