@@ -2,61 +2,70 @@ import express from "express";
 import { Message } from "./Message.class.js";
 
 const app = express();
-
 const port = 3090;
+let messages = [];
 
-let messages = []
+app.use(express.json());
 
-app.use(express.json())
-let retornarTudo = () =>{
-    return messages
-}
+const retornarTudo = () => {
+    return messages;
+};
 
-let createMessage = (name,content) => {
-    
-  const newMessage = new Message(name,content)
-  messages.push(newMessage)
-  return newMessage
-}
-let updateMessage = (id,content) => {
-    const message = messages.findIndex(message => message.id === id )
-    const updatedMessage = messages[message].content == content 
-    return updatedMessage
-  }
+const createMessage = (name, content) => {
+    const newMessage = new Message(name, content);
+    messages.push(newMessage);
+    return newMessage;
+};
 
-  let deleteMessage = id => {
-    const message = messages.findIndex(message => message.id === id )
-    const deletedMessage =  messages.splice(messages[message],1)
-    return deletedMessage
-  }
-app.get('/messages',(req,res)=>{
-    const allMessages = retornarTudo()
-    res.status(201).json({allMessages})
-})
+const updateMessage = (id, content) => {
+    const messageIndex = messages.findIndex((message) => message.id === id);
+    if (messageIndex !== -1) {
+        messages[messageIndex].content = content;
+        return true;
+    }
+    return false;
+};
 
-app.post('/create-message',(req,res)=>{
-    const {name,content } = req.body;
-    const newMessage = createMessage(name,content)
-    res.status(201).json({message:'Messagem criada com sucesso!',newMessage})
-})
-app.patch('/update-message/:id',(req,res)=>{
-    const {id} = req.params
-    const {content } = req.body;
-    const updatedMessage = updateMessage(id,content)
-    res.status(201).json({message:'Messagem criada com sucesso!'})
-})
+const deleteMessage = (id) => {
+    const messageIndex = messages.findIndex((message) => message.id === id);
+    if (messageIndex !== -1) {
+        const deletedMessage = messages.splice(messageIndex, 1);
+        return deletedMessage[0];
+    }
+    return null;
+};
 
-app.delete('/delete-message/:id',(req,res)=>{
-    const {id} = req.params;
-    const deletedMessage = deleteMessage(id);
-    res.status(201).json({message:'Messagem apagada com sucesso!',deletedMessage})
+app.get("/messages", (req, res) => {
+    const allMessages = retornarTudo();
+    res.status(200).json({ allMessages });
 });
 
+app.post("/create-message", (req, res) => {
+    const { name, content } = req.body;
+    const newMessage = createMessage(name, content);
+    res.status(201).json({ message: "Mensagem criada com sucesso!", newMessage });
+});
 
+app.patch("/update-message/:id", (req, res) => {
+    const { id } = req.params;
+    const { content } = req.body;
+    const updated = updateMessage(id, content);
+    if (updated) {
+        res.status(200).json({ message: "Mensagem atualizada com sucesso!" });
+    } else {
+        res.status(404).json({ message: "Mensagem não encontrada." });
+    }
+});
 
+app.delete("/delete-message/:id", (req, res) => {
+    const { id } = req.params;
+    const deletedMessage = deleteMessage(id);
+    if (deletedMessage) {
+        res.status(200).json({ message: "Mensagem apagada com sucesso!", deletedMessage });
+    } else {
+        res.status(404).json({ message: "Mensagem não encontrada." });
+    }
+});
 
-
-
-
-
-app.listen(port,()=> console.log(`Server running in port ${port}`))
+app.listen(port, () => console.log(`Servidor rodando na porta ${port}`));
+    
