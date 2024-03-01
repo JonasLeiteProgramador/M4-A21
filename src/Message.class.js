@@ -5,6 +5,6 @@ export class Message {
         this.id = uuidv4();
         this.name = name;
         this.content = content;
-        this.created_at = new Date().toLocaleTimeString('pt-BR');
+        this.criado_em = new Date().toLocaleTimeString('pt-BR', { timeZone: 'America/Sao_Paulo' });
     }
 }
