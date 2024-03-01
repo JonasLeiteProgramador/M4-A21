@@ -36,8 +36,8 @@ const deleteMessage = (id) => {
 };
 
 app.get("/messages", (req, res) => {
-    const allMessages = retornarTudo();
-    res.status(200).json({ allMessages });
+     ;
+    res.status(200).json({ messagens:retornarTudo() });
 });
 
 app.post("/create-message", (req, res) => {
@@ -68,4 +68,3 @@ app.delete("/delete-message/:id", (req, res) => {
 });
 
 app.listen(port, () => console.log(`Servidor rodando na porta ${port}`));
-    
