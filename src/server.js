@@ -8,7 +8,9 @@ const port = 3090;
 let messages = []
 
 app.use(express.json())
-
+let retornarTudo = () =>{
+    return messages
+}
 
 let createMessage = (name,content) => {
     
@@ -28,7 +30,8 @@ let updateMessage = (id,content) => {
     return deletedMessage
   }
 app.get('/messages',(req,res)=>{
-    res.status(201).json({messages})
+    const allMessages = retornarTudo()
+    res.status(201).json({allMessages})
 })
 
 app.post('/create-message',(req,res)=>{
